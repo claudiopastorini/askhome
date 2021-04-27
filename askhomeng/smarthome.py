@@ -1,6 +1,7 @@
 import json
 import uuid
 
+from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
 from requests_oauthlib import OAuth2Session
 
 from . import logger
@@ -309,11 +310,14 @@ class Smarthome(object):
                                token_updater=lambda token: self._store_tokens_func(username, token))
 
         # Makes the call
-        response = client.post("https://api.eu.amazonalexa.com/v3/events",
-                               json=payload,
-                               headers=headers)
-
-        # TODO: catch the Unauthorized exception (?) that indicates that the user disabled the skill
+        try:
+            response = client.post("https://api.eu.amazonalexa.com/v3/events",
+                                   json=payload,
+                                   headers=headers)
+        except InvalidGrantError:
+            logger.error("The authorization code is invalid, expired, revoked, or was issued to a different client_id. So the user is not more able to use the integration")
+            # TODO: invoke remove integration
+            raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
         response.raise_for_status()
@@ -382,11 +386,14 @@ class Smarthome(object):
                                token_updater=lambda token: self._store_tokens_func(username, token))
 
         # Makes the call
-        response = client.post("https://api.eu.amazonalexa.com/v3/events",
-                               json=payload,
-                               headers=headers)
-
-        # TODO: catch the Unauthorized exception (?) that indicates that the user disabled the skill
+        try:
+            response = client.post("https://api.eu.amazonalexa.com/v3/events",
+                                   json=payload,
+                                   headers=headers)
+        except InvalidGrantError:
+            logger.error("The authorization code is invalid, expired, revoked, or was issued to a different client_id. So the user is not more able to use the integration")
+            # TODO: invoke remove integration
+            raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
         response.raise_for_status()
@@ -464,11 +471,14 @@ class Smarthome(object):
                                token_updater=lambda token: self._store_tokens_func(username, token))
 
         # Makes the call
-        response = client.post("https://api.eu.amazonalexa.com/v3/events",
-                               json=payload,
-                               headers=headers)
-
-        # TODO: catch the Unauthorized exception (?) that indicates that the user disabled the skill
+        try:
+            response = client.post("https://api.eu.amazonalexa.com/v3/events",
+                                   json=payload,
+                                   headers=headers)
+        except InvalidGrantError:
+            logger.error("The authorization code is invalid, expired, revoked, or was issued to a different client_id. So the user is not more able to use the integration")
+            # TODO: invoke remove integration
+            raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
         response.raise_for_status()
