@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='askhomeng',
@@ -13,6 +12,7 @@ setup(
     description='Alexa Skills Kit library for working with Smart Home Skill API',
     install_requires=[
         'inflection',
-        'requests'
+        'requests',
+        'requests_oauthlib'
     ],
 )
