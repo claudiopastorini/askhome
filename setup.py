@@ -2,16 +2,17 @@
 from distutils.core import setup
 
 setup(
-    name='askhome',
-    packages=['askhome'],
-    version='0.1.5',
-    author=u'Matěj Hlaváček',
-    author_email='hlavacek.matej@gmail.com',
-    url='https://github.com/mathead/askhome',
-    download_url='https://github.com/mathead/askhome/archive/0.1.tar.gz',
+    name='askhomeng',
+    packages=['askhomeng'],
+    version='0.1.0',
+    author=u'Claudio Pastorini',
+    author_email='claudio.pastorini@powahome.com',
+    url='https://github.com/claudiopastorini/askhomeng',
+    download_url='https://github.com/claudiopastorini/askhomeng/archive/0.1.tar.gz',
     keywords='',
     description='Alexa Skills Kit library for working with Smart Home Skill API',
     install_requires=[
-        'inflection'
+        'inflection',
+        'requests'
     ],
 )
