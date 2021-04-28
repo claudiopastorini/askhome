@@ -2,6 +2,7 @@ import json
 import uuid
 
 from oauthlib.oauth2.rfc6749.errors import InvalidGrantError
+from requests.exceptions import HTTPError
 from requests_oauthlib import OAuth2Session
 
 from . import logger
@@ -334,7 +335,23 @@ class Smarthome(object):
                 raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except HTTPError as e:
+
+            # If the error is Unauthorized error it means that the user is revoked the access to the Alexa skill
+            if e.response.status_code == 401:
+                logger.error("The user is not anymore authorized to use the integration")
+
+                # If the user provided a valid disconnection handler
+                if self._disconnect_user_func is not None:
+                    # Calls it in order to allow the integration to clean the integration stuffs
+                    logger.debug("Calling the disconnect function...")
+                    self._disconnect_user_func(username)
+                    return
+
+            # Otherwise raise the exception
+            raise
 
     def rediscover(self, username: str):
         """Summary
@@ -417,7 +434,23 @@ class Smarthome(object):
                 raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except HTTPError as e:
+
+            # If the error is Unauthorized error it means that the user is revoked the access to the Alexa skill
+            if e.response.status_code == 401:
+                logger.error("The user is not anymore authorized to use the integration")
+
+                # If the user provided a valid disconnection handler
+                if self._disconnect_user_func is not None:
+                    # Calls it in order to allow the integration to clean the integration stuffs
+                    logger.debug("Calling the disconnect function...")
+                    self._disconnect_user_func(username)
+                    return
+
+            # Otherwise raise the exception
+            raise
 
     def report_change(self, endpoint_id: str, username: str, changed_properties: list, not_changed_properties: list, interaction_type: str):
         """Summary
@@ -509,7 +542,23 @@ class Smarthome(object):
                 raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except HTTPError as e:
+
+            # If the error is Unauthorized error it means that the user is revoked the access to the Alexa skill
+            if e.response.status_code == 401:
+                logger.error("The user is not anymore authorized to use the integration")
+
+                # If the user provided a valid disconnection handler
+                if self._disconnect_user_func is not None:
+                    # Calls it in order to allow the integration to clean the integration stuffs
+                    logger.debug("Calling the disconnect function...")
+                    self._disconnect_user_func(username)
+                    return
+
+            # Otherwise raise the exception
+            raise
 
     def _lambda_handler(self, event, context=None):
         # This method is here just so it can be wrapped for logging
