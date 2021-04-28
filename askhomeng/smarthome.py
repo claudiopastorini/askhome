@@ -48,6 +48,7 @@ class Smarthome(object):
         self._prepare_func = None
         self._retrieve_tokens_func = None
         self._store_tokens_func = None
+        self._disconnect_user_func = None
 
     def add_endpoint(self, endpoint_id, endpoint_class,
                      manufacturer_name=None, description=None, friendly_name=None, display_categories=None, additional_attributes=None, connections=None, relationships=None, cookie=None,
@@ -206,6 +207,12 @@ class Smarthome(object):
         self._store_tokens_func = func
         return func
 
+    def disconnect_user_handler(self, func):
+        """TODO
+        """
+        self._disconnect_user_func = func
+        return func
+
     def lambda_handler(self, event, context=None):
         """Main entry point for handling interfaces. Pass the AWS Lambda events here."""
         logger.debug(json.dumps(event, indent=2))
@@ -316,8 +323,15 @@ class Smarthome(object):
                                    headers=headers)
         except InvalidGrantError:
             logger.error("The authorization code is invalid, expired, revoked, or was issued to a different client_id. So the user is not more able to use the integration")
-            # TODO: invoke remove integration
-            raise
+
+            # If the user provided a valid disconnection handler
+            if self._disconnect_user_func is not None:
+                # Calls it in order to allow the integration to clean the integration stuffs
+                logger.debug("Calling the disconnect function...")
+                self._disconnect_user_func(username)
+            else:
+                # Otherwise raise the exception and let the user decide what to do
+                raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
         response.raise_for_status()
@@ -392,8 +406,15 @@ class Smarthome(object):
                                    headers=headers)
         except InvalidGrantError:
             logger.error("The authorization code is invalid, expired, revoked, or was issued to a different client_id. So the user is not more able to use the integration")
-            # TODO: invoke remove integration
-            raise
+
+            # If the user provided a valid disconnection handler
+            if self._disconnect_user_func is not None:
+                # Calls it in order to allow the integration to clean the integration stuffs
+                logger.debug("Calling the disconnect function...")
+                self._disconnect_user_func(username)
+            else:
+                # Otherwise raise the exception and let the user decide what to do
+                raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
         response.raise_for_status()
@@ -477,8 +498,15 @@ class Smarthome(object):
                                    headers=headers)
         except InvalidGrantError:
             logger.error("The authorization code is invalid, expired, revoked, or was issued to a different client_id. So the user is not more able to use the integration")
-            # TODO: invoke remove integration
-            raise
+
+            # If the user provided a valid disconnection handler
+            if self._disconnect_user_func is not None:
+                # Calls it in order to allow the integration to clean the integration stuffs
+                logger.debug("Calling the disconnect function...")
+                self._disconnect_user_func(username)
+            else:
+                # Otherwise raise the exception and let the user decide what to do
+                raise
 
         logger.debug(f"Response from Amazon Alexa: '{response}'")
         response.raise_for_status()
