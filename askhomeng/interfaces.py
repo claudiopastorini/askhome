@@ -299,6 +299,29 @@ class PowerControllerInterface(ControllerInterface):
         return response
 
 
+class BrigthnessControllerInterface(ControllerInterface):
+    """Interface class for Alexa.BrightnessController Interface"""
+
+    @property
+    def brightness(self):
+        return self.payload.get('brightness')
+
+    @property
+    def brightness_delta(self):
+        return self.payload.get('brightnessDelta')
+
+    def response(self, brightness, time_of_sample=None, uncertainty_in_milliseconds=0):
+        response = super().response()
+
+        response['context']['properties'] = []
+
+        brightness_property = self.create_property_response("brightness", brightness, time_of_sample, uncertainty_in_milliseconds)
+
+        response['context']['properties'].append(brightness_property)
+
+        return response
+
+
 class PercentageControllerInterface(ControllerInterface):
     """Interface class for Alexa.PercentageController Interface"""
 
