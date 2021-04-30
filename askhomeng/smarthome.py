@@ -317,6 +317,8 @@ class Smarthome(object):
                                auto_refresh_kwargs={'client_id': alexa_client_id, 'client_secret': alexa_client_secret},
                                token_updater=lambda token: self._store_tokens_func(username, token))
 
+        logger.debug(f"Sending: \n{json.dumps(payload, indent=2)}")
+
         # Makes the call
         try:
             response = client.post("https://api.eu.amazonalexa.com/v3/events",
@@ -415,6 +417,8 @@ class Smarthome(object):
                                auto_refresh_url="https://api.amazon.com/auth/o2/token",
                                auto_refresh_kwargs={'client_secret': alexa_client_secret},
                                token_updater=lambda token: self._store_tokens_func(username, token))
+
+        logger.debug(f"Sending: \n{json.dumps(payload, indent=2)}")
 
         # Makes the call
         try:
@@ -523,6 +527,8 @@ class Smarthome(object):
                                auto_refresh_url="https://api.amazon.com/auth/o2/token",
                                auto_refresh_kwargs={'client_id': alexa_client_id, 'client_secret': alexa_client_secret},
                                token_updater=lambda token: self._store_tokens_func(username, token))
+
+        logger.debug(f"Sending: \n{json.dumps(payload, indent=2)}")
 
         # Makes the call
         try:
