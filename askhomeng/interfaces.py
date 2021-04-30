@@ -36,6 +36,10 @@ def create_interface(data, context=None):
         if directive_name == 'TurnOn' or directive_name == 'TurnOff':
             return PowerControllerInterface(data, context)
 
+    if namespace == 'Alexa.BrightnessController':
+        if directive_name == 'SetBrightness' or directive_name == 'AdjustBrightness':
+            return BrigthnessControllerInterface(data, context)
+
     if namespace == 'Alexa.PercentageController':
         if directive_name == 'SetPercentage' or directive_name == 'AdjustPercentage':
             return PercentageControllerInterface(data, context)
