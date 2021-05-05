@@ -165,7 +165,7 @@ class InterfaceWithState(Interface):
         self.cookie = self.endpoint.get('cookie')
 
     @classmethod
-    def create_property_response(cls, name, value, time_of_sample=None, uncertainty_in_milliseconds=0, namespace=None):
+    def create_property_response(cls, name, value, instance=None, time_of_sample=None, uncertainty_in_milliseconds=0, namespace=None):
 
         if time_of_sample is None:
             time_of_sample = datetime.utcnow()
@@ -180,6 +180,9 @@ class InterfaceWithState(Interface):
             "timeOfSample": time_of_sample.strftime('%Y-%m-%dT%H:%M:%SZ'),
             "uncertaintyInMilliseconds": uncertainty_in_milliseconds
         }
+
+        if instance is not None:
+            property_response['instance'] = instance
 
         return property_response
 
@@ -267,7 +270,7 @@ class EndpointHealthInterface(ControllerInterface):
 
         response['context']['properties'] = []
 
-        connectivity_state_property = self.create_property_response("connectivity", connectivity, time_of_sample, uncertainty_in_milliseconds)
+        connectivity_state_property = self.create_property_response("connectivity", connectivity, time_of_sample=time_of_sample, uncertainty_in_milliseconds=uncertainty_in_milliseconds)
 
         response['context']['properties'].append(connectivity_state_property)
 
@@ -296,7 +299,7 @@ class PowerControllerInterface(ControllerInterface):
 
         response['context']['properties'] = []
 
-        power_state_property = self.create_property_response("powerState", power_state, time_of_sample, uncertainty_in_milliseconds)
+        power_state_property = self.create_property_response("powerState", power_state, time_of_sample=time_of_sample, uncertainty_in_milliseconds=uncertainty_in_milliseconds)
 
         response['context']['properties'].append(power_state_property)
 
@@ -319,7 +322,7 @@ class BrigthnessControllerInterface(ControllerInterface):
 
         response['context']['properties'] = []
 
-        brightness_property = self.create_property_response("brightness", brightness, time_of_sample, uncertainty_in_milliseconds)
+        brightness_property = self.create_property_response("brightness", brightness, time_of_sample=time_of_sample, uncertainty_in_milliseconds=uncertainty_in_milliseconds)
 
         response['context']['properties'].append(brightness_property)
 
@@ -342,7 +345,7 @@ class PercentageControllerInterface(ControllerInterface):
 
         response['context']['properties'] = []
 
-        percentage_state_property = self.create_property_response("percentage", percentage, time_of_sample, uncertainty_in_milliseconds)
+        percentage_state_property = self.create_property_response("percentage", percentage, time_of_sample=time_of_sample, uncertainty_in_milliseconds=uncertainty_in_milliseconds)
 
         response['context']['properties'].append(percentage_state_property)
 
@@ -365,7 +368,7 @@ class PowerLevelControllerInterface(ControllerInterface):
 
         response['context']['properties'] = []
 
-        power_level_state_property = self.create_property_response("powerLevel", power_level, time_of_sample, uncertainty_in_milliseconds)
+        power_level_state_property = self.create_property_response("powerLevel", power_level, time_of_sample=time_of_sample, uncertainty_in_milliseconds=uncertainty_in_milliseconds)
 
         response['context']['properties'].append(power_level_state_property)
 
@@ -383,12 +386,12 @@ class RangeControllerInterface(ControllerInterface):
     def range_value_delta(self):
         return self.payload.get('rangeValueDelta')
 
-    def response(self, range_value, time_of_sample=None, uncertainty_in_milliseconds=0):
+    def response(self, range_value, instance=None, time_of_sample=None, uncertainty_in_milliseconds=0):
         response = super().response()
 
         response['context']['properties'] = []
 
-        range_value_state_property = self.create_property_response("rangeValue", range_value, time_of_sample, uncertainty_in_milliseconds)
+        range_value_state_property = self.create_property_response("rangeValue", range_value, instance=instance, time_of_sample=time_of_sample, uncertainty_in_milliseconds=uncertainty_in_milliseconds)
 
         response['context']['properties'].append(range_value_state_property)
 
