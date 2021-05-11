@@ -38,7 +38,7 @@ def create_interface(data, context=None):
 
     if namespace == 'Alexa.BrightnessController':
         if directive_name == 'SetBrightness' or directive_name == 'AdjustBrightness':
-            return BrigthnessControllerInterface(data, context)
+            return BrightnessControllerInterface(data, context)
 
     if namespace == 'Alexa.PercentageController':
         if directive_name == 'SetPercentage' or directive_name == 'AdjustPercentage':
@@ -306,7 +306,7 @@ class PowerControllerInterface(ControllerInterface):
         return response
 
 
-class BrigthnessControllerInterface(ControllerInterface):
+class BrightnessControllerInterface(ControllerInterface):
     """Interface class for Alexa.BrightnessController Interface"""
 
     @property
